@@ -1,9 +1,36 @@
 import { useState } from 'react';
 import './App.css'; 
+
+import classificationData1 from '/amazon/logistic-regression/CorrelationMatrix.png';
+import classificationData2 from '/amazon/logistic-regression/TargetDistribution.png';
+import regData1 from '/crimes dataset/Correlation.png';
+import regData2 from '/crimes dataset/TargetDistricution.png';
+
 import lRimg1 from '/amazon/logistic-regression/image-matrix.png';
 import lRimg2 from '/amazon/logistic-regression/image-roc.png';
-import classificationData1 from '/amazon/logistic-regression/CorrelationMatrix.png';
-import classificationData2 from '/amazon/logistic-regression/TargetDistribution.png'
+import annOutput from '/amazon/ann/output.png';
+import knnOutput from '/amazon/knn/output.png';
+import nbOutput from '/amazon/naive bayes/output.png';
+import rfAccuracies from '/amazon/rf/Accuraciespng.png';
+import rfOutput from '/amazon/rf/output.png';
+import rfOutputROCCom from '/amazon/rf/outputROCCom.png'; 
+import rfROCOutput from '/amazon/rf/ROCoutput.png';
+import svmDefaultROC from '/amazon/svm/DefaultROCoutput.png'; 
+import svmOutput from '/amazon/svm/output.png';
+
+import annActualVS from '/crimes dataset/ann/ActualVSPredictedoutput.png';
+import annLoss from '/crimes dataset/ann/Lossoutput.png';
+import knnCompOutput from '/crimes dataset/knn/Compoutput.png';
+import knnOutputReg from '/crimes dataset/knn/output.png';
+import lrFeature from '/crimes dataset/linear regression/image-feature-selection.png';
+import lrTest from '/crimes dataset/linear regression/image-test.png';
+import lrTrain from '/crimes dataset/linear regression/image-train.png';
+import lrImage from '/crimes dataset/linear regression/image.png';
+import rfOutputReg from '/crimes dataset/rf/output.png';
+import svmComparison from '/crimes dataset/svm/ComparaisonOutput.png';
+import svmOutputReg from '/crimes dataset/svm/output.png';
+import svmResiduals from '/crimes dataset/svm/RisidualsOutput.png';
+
 
 // Data from the report
 const teamMembers = [
@@ -32,8 +59,7 @@ const datasets = {
     challenges: "Contains missing values and requires feature engineering",
     size: "127 features and 1,994 instances",
     images: [
-      "/api/placeholder/750/400",
-      "/api/placeholder/750/350"
+      regData1, regData2
     ]
   }
 };
@@ -54,7 +80,7 @@ const algorithms = {
       methodology: "Instead of one-hot encoding, embeddings were used to represent categorical features efficiently. The network architecture consisted of an input layer of size 384 (combined size of all embedded vectors), followed by hidden layers of sizes 192, 96, 48, and an output layer of size 1. Binary Cross-Entropy loss function and ReLU activation function were used.",
       results: "The embedding approach allowed for effective handling of high-cardinality categorical data.",
       images: [
-        "/api/placeholder/550/400"
+        annOutput
       ]
     },
     {
@@ -62,8 +88,8 @@ const algorithms = {
       methodology: "Initially, a baseline SVM model with default parameters was tested, achieving 94% accuracy but failing to differentiate between classes due to imbalance. Hyperparameter tuning was conducted, optimizing for kernel type, regularization parameter C, and kernel coefficient gamma. The best configuration used an RBF kernel with C=100 and gamma=auto.",
       results: "While accuracy improved slightly to 94.13%, the ROC AUC was only 0.6430, indicating limited performance on the imbalanced dataset.",
       images: [
-        "/api/placeholder/400/350",
-        "/api/placeholder/400/350"
+        svmOutput,
+        svmDefaultROC
       ]
     },
     {
@@ -71,8 +97,7 @@ const algorithms = {
       methodology: "K-Nearest Neighbors algorithm was implemented with optimized parameters.",
       results: "Accuracy: 0.9405, Precision: 0.9497, Recall: 0.9893, F1 Score: 0.9691, ROC AUC: 0.6898",
       images: [
-        "/api/placeholder/550/400",
-        "/api/placeholder/550/400"
+        knnOutput
       ]
     },
     {
@@ -80,8 +105,7 @@ const algorithms = {
       methodology: "The Naive Bayes classifier was applied as a baseline probabilistic approach.",
       results: "Accuracy: 0.9135, Precision: 0.9446, Recall: 0.9649, F1 Score: 0.9547, ROC AUC: 0.5661",
       images: [
-        "/api/placeholder/550/400",
-        "/api/placeholder/550/400"
+      nbOutput
       ]
     },
     {
@@ -89,15 +113,10 @@ const algorithms = {
       methodology: "To address the severe class imbalance, multiple resampling strategies were implemented alongside hyperparameter optimization. The Random Forest was tuned with 5-fold cross-validation, using 200 estimators, unlimited max depth, and minimum 5 samples per split. Four resampling approaches (SMOTE, ADASYN, Oversampling, Undersampling) were evaluated.",
       results: "SMOTE achieved the highest ROC AUC (0.84) with balanced performance. SMOTE provided the best balance between class separation and minority class detection.",
       images: [
-        "/api/placeholder/550/400"
-      ]
-    },
-    {
-      name: "XGBoost vs LightGBM",
-      methodology: "K-fold evaluation comparing LightGBM and XGBoost across multiple resampling techniques was performed. Various sampling methods including SMOTE, SMOTETomek, ADASYN, random oversampling, and undersampling were tested.",
-      results: "LightGBM demonstrated superior robustness, maintaining strong test accuracy (82.7-90.3%) across all sampling methods. LightGBM with SMOTE was identified as the optimal solution, achieving 90.3% test accuracy and 0.905 AUC.",
-      images: [
-        "/api/placeholder/550/250"
+        rfAccuracies, 
+        rfOutput, 
+        rfOutputROCCom, 
+        rfROCOutput
       ]
     }
   ],
@@ -107,8 +126,7 @@ const algorithms = {
       methodology: "Dimensionality reduction and feature selection were applied to improve model performance. PCA was used to select the top 14 principal components, capturing approximately 84% of total variance. A RANSAC regressor with a linear base estimator was applied to increase robustness against outliers.",
       results: "R² score of 0.6767 on training and 0.6544 on testing. MSE was 0.0176 for training and 0.0185 for testing. The closely aligned metrics between training and testing indicate that the model is both accurate and robust, with no signs of overfitting.",
       images: [
-        "/api/placeholder/550/250",
-        "/api/placeholder/550/250"
+        lrFeature, lrImage, lrTest, lrTrain
       ]
     },
     {
@@ -116,18 +134,16 @@ const algorithms = {
       methodology: "A fully-connected Neural Network was used with simple architecture given the tabular nature of the data. Three one-hidden-layer models were tested: one with hidden-size of 21 using ReLU, one with hidden-size of 62 using ReLU, and one with hidden-size of 21 using LeakyReLU. MSE loss function was used with the full dataset as a batch, 500 iterations, 0.01 learning rate, and Adam optimizer.",
       results: "The first model performed best with a 62% R² score (slightly under the model with 2 hidden layers at 63%), but was preferred for its simplicity and faster computation.",
       images: [
-        "/api/placeholder/550/400"
-      ]
+annActualVS, annLoss      ]
     },
     {
-      name: "SVR",
+      name: "SVM",
       methodology: "A baseline Support Vector Regression model was established, followed by hyperparameter tuning using greedy search over kernel type, C (regularization parameter), gamma (kernel coefficient), and epsilon (margin of tolerance). The optimal configuration used an RBF kernel, C=100, gamma=auto, and epsilon=0.1.",
       results: "The optimized model showed a 23.11% improvement in both MSE and R² score over the default model, demonstrating enhanced prediction accuracy and better fit to the data.",
       images: [
-        "/api/placeholder/550/250",
-        "/api/placeholder/550/250",
-        "/api/placeholder/550/70",
-        "/api/placeholder/550/250"
+       svmComparison,
+       svmDefaultROC,
+       svmOutputReg
       ]
     },
     {
@@ -135,16 +151,15 @@ const algorithms = {
       methodology: "An initial KNN regression model was trained with default parameters (n_neighbors=5). After applying PCA (retaining 98% variance), the feature space was reduced from 42 to 34 components. GridSearchCV was used to optimize hyperparameters: n_neighbors=10, weights='uniform', and p=2 (Euclidean distance).",
       results: "The baseline model achieved an MSE of 0.0207 and R² of 0.5684. After optimization with PCA, performance improved to an MSE of 0.0177/0.0187 and R² of 0.6819/0.6101 for training/validation sets respectively.",
       images: [
-        "/api/placeholder/550/400"
-      ]
+knnCompOutput,
+knnOutputReg      ]
     },
     {
       name: "Random Forests",
       methodology: "Feature selection was performed using a RandomForestRegressor with conservative hyperparameters (max_depth=5, min_samples_leaf=5). The final model implemented a regularized RandomForestRegressor with restricted tree complexity (max_depth=6, min_samples_split=20, min_samples_leaf=15) and stochastic subsampling (max_features=0.4, max_samples=0.7).",
       results: "The model showed strong generalization with tight train-test consistency (R² gap: 0.078, MSE ratio: 1.09), cross-validation stability (CV R²: 0.625 ± 0.012), and balanced performance (Test R²: 0.624, Test MSE: 0.018).",
       images: [
-        "/api/placeholder/550/220"
-      ]
+rfOutputReg     ]
     }
   ]
 };
