@@ -95,7 +95,7 @@ const algorithms = {
     {
       name: "KNN",
       methodology: "K-Nearest Neighbors algorithm was implemented with optimized parameters.",
-      results: "Accuracy: 0.9405, Precision: 0.9497, Recall: 0.9893, F1 Score: 0.9691, ROC AUC: 0.6898",
+      results: "Before SMOTE (Imbalanced Data) Accuracy: 94.05% ROC : 0.6898 After SMOTE (Balanced Data with Oversampling) Accuracy: 85.84% ROC : 0.7351",
       images: [
         knnOutput
       ]
